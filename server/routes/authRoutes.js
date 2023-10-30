@@ -73,4 +73,3 @@ router.get('/', checkAuthenticated, (req, res) => {
 })
 
 module.exports = router;
-
