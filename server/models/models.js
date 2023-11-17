@@ -16,10 +16,8 @@ const questionSchema = new Schema({
   title: String,
   content: String,
   category: String,
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
+  user: Object,
+  
   answers: [{
     type: Schema.Types.ObjectId,
     ref: 'Answer'
@@ -28,14 +26,9 @@ const questionSchema = new Schema({
 
 const answerSchema = new Schema({
   content: String,
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  question: {
-    type: Schema.Types.ObjectId,
-    ref: 'Question'
-  },
+  category: String,
+  user: Object,
+  questionId: Schema.Types.ObjectId,
 });
 
 const User = mongoose.model('User', userSchema);
