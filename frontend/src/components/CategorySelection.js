@@ -4,6 +4,19 @@ import { useContext } from 'react';
 import { UserContext, useUser } from './UserContext';
 
 function CategorySelection() {
+  const { user } = useUser();
+ 
+  if (!user) {
+    return (
+      <div className="form-container">
+        <h1 className="form-heading">Choose a Category</h1>
+        <div className="category-button">
+          <Link to="/login" className="category-link">Login to access categories</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="form-container">
       <h1 className="form-heading">Choose a Category</h1>
