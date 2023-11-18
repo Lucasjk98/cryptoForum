@@ -35,15 +35,17 @@ function Question() {
       });
   };
 
-  return (
-    <div>
-      <h3>{question.title}</h3>
-      <h5>posted by {question.user.user.name}</h5>
-      <p>{question.content}</p>
+return (
+    <div className="form-container">
+      <h3 className="form-heading">{question.title}</h3>
+      <h5 className="form-subheading">posted by {question.user.user.name}</h5>
+      <p className="form-text">{question.content}</p>
 
       <ul>
         {question.answers && question.answers.map((answer) => (
-          <li key={answer._id}>{answer.content} (Response by: {answer.user.user.name})</li>
+          <li key={answer._id} className="form-text">
+            {answer.content} (Response by: {answer.user.user.name})
+          </li>
         ))}
       </ul>
 
@@ -51,9 +53,10 @@ function Question() {
         type="text"
         value={newAnswer.content}
         onChange={(e) => setNewAnswer({ ...newAnswer, content: e.target.value })}
+        className="form-input"
       />
-      <button onClick={handleCreateAnswer}>Post Answer</button>
-      <Link to={`/threads/questions/${category}`}>Back to Questions</Link>
+      <button onClick={handleCreateAnswer} className="form-button">Post Answer</button>
+      <Link to={`/threads/questions/${category}`} className="form-link">Back to Questions</Link>
     </div>
   );
 }

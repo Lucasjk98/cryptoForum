@@ -42,14 +42,15 @@ const handleLogin = async () => {
 
 
 
-  return (
-    <div>
-      <h1>Login</h1>
-      <input type="email" name="email" placeholder="Email" onChange={handleInputChange} />
-      <input type="password" name="password" placeholder="Password" onChange={handleInputChange} />
-      <button onClick={handleLogin}>Login</button>
-    </div>
+return (
+  <div className="form-container">
+    <h1 className="form-heading">Login</h1>
+    <input className="form-input" type="email" name="email" placeholder="Email" onChange={handleInputChange} />
+    <input className="form-input" type="password" name="password" placeholder="Password" onChange={handleInputChange} />
+    <button className="form-button" onClick={handleLogin}>Login</button>
+  </div>
   );
 }
+
 
 export default Login;

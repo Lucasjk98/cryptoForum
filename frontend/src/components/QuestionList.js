@@ -18,21 +18,24 @@ function QuestionsList() {
       });
   }, [category]);
 
-  // Render the list of questions
- return (
-  <div>
-    <h2>{category} Questions</h2>
-    <Link to={`/questions/${category}/new`}>Create New Question</Link>
+
+return (
+  <div className="form-container">
+    <h2 className="form-heading">{category} Questions</h2>
+    <Link to={`/questions/${category}/new`} className="form-link">Create New Question</Link>
     <ul>
       {questions.map((question) => (
         <li key={question._id}>
-          <Link to={`/threads/questions/${category}/${question._id}`}>{question.title}</Link>
+          <Link to={`/threads/questions/${category}/${question._id}`} className="form-link">
+            {question.title}
+          </Link>
         </li>
       ))}
     </ul>
   </div>
 );
 }
+
 
 export default QuestionsList;
 

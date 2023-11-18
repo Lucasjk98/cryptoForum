@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 
 function CategorySelection() {
   return (
-    <div>
-      <h1>Choose a Category</h1>
-      <ul>
-        <li><Link to="/threads/questions/Bitcoin">Bitcoin</Link></li>
-        <li><Link to= "/threads/questions/Ethereum">Ethereum</Link></li>
-      </ul>
+    <div className="form-container">
+      <h1 className="form-heading">Choose a Category</h1>
+      <div className="category-button">
+        <Link to="/threads/questions/Bitcoin" className="category-link">Bitcoin</Link>
+      </div>
+      <div className="category-button">
+        <Link to="/threads/questions/Ethereum" className="category-link">Ethereum</Link>
+      </div>
     </div>
   );
 }

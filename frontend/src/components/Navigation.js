@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 function Navigation() {
   return (
     <nav>
-      <ul>
+      <div className='navigation'>
+      <ul className='header-item'>
         <li>
           <Link to="/register">Register</Link>
         </li>
@@ -17,9 +18,8 @@ function Navigation() {
          <li>
           <Link to="/profile">Profile</Link>
         </li>
-        
-        
-      </ul>
+        </ul>
+      </div>
     </nav>
   );
 }

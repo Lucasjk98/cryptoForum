@@ -22,21 +22,23 @@ function CreateQuestionForm() {
       });
   };
 
-  return (
-    <div>
-      <h2>Create a New Question</h2>
+return (
+    <div className="form-container">
+      <h2 className="form-heading">Create a New Question</h2>
       <input
         type="text"
         placeholder="Title"
         value={newQuestion.title}
         onChange={(e) => setNewQuestion({ ...newQuestion, title: e.target.value })}
+        className="form-input"
       />
       <textarea
         placeholder="Content"
         value={newQuestion.content}
         onChange={(e) => setNewQuestion({ ...newQuestion, content: e.target.value })}
+        className="form-input"
       />
-      <button onClick={handleQuestionSubmit}>Submit Question</button>
+      <button onClick={handleQuestionSubmit} className="form-button">Submit Question</button>
     </div>
   );
 }
