@@ -29,7 +29,7 @@ const start = async () => {
   }
 };
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000', 'https://evening-wave-27395-295955682332.herokuapp.com'];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -40,15 +40,6 @@ const corsOptions = {
     }
   },
 };
-
-const buildPath = path.join(__dirname, '../client/express-app/build');
-
-app.use(express.static(buildPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
-});
-
 
 app.use(cors(corsOptions));
 
@@ -222,5 +213,15 @@ app.get('/questions/:questionId/answers', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+const buildPath = path.join(__dirname, '../client/express-app/build');
+
+app.use(express.static(buildPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
+
 
 start();
