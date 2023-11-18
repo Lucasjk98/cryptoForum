@@ -41,9 +41,9 @@ return (
       <h5 className="form-subheading">posted by {question.user.user.name}</h5>
       <p className="form-text">{question.content}</p>
 
-      <ul>
+      <ul className='no-bullets'>
         {question.answers && question.answers.map((answer) => (
-          <li key={answer._id} className="form-text">
+          <li key={answer._id} className="no-bullets">
             {answer.content} (Response by: {answer.user.user.name})
           </li>
         ))}

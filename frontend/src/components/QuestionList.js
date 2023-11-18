@@ -23,9 +23,9 @@ return (
   <div className="form-container">
     <h2 className="form-heading">{category} Questions</h2>
     <Link to={`/questions/${category}/new`} className="form-link">Create New Question</Link>
-    <ul>
+    <ul className='no-bullets'>
       {questions.map((question) => (
-        <li key={question._id}>
+        <li key={question._id} className='no-bullets'>
           <Link to={`/threads/questions/${category}/${question._id}`} className="form-link">
             {question.title}
           </Link>
