@@ -38,13 +38,18 @@ function Question() {
 return (
     <div className="form-container">
       <h3 className="form-heading">{question.title}</h3>
-      <h5 className="form-subheading">posted by {question.user.user.name}</h5>
-      <p className="form-text">{question.content}</p>
 
-      <ul className='no-bullets'>
+      <div className="question-box">
+        <h5 className="form-subheading">posted by {question.user.user.name}</h5>
+        <p className="form-text">{question.content}</p>
+      </div>
+
+      <ul className="no-bullets">
         {question.answers && question.answers.map((answer) => (
           <li key={answer._id} className="no-bullets">
-            {answer.content} (Response by: {answer.user.user.name})
+            <div className="answer-box">
+              {answer.content} (Response by: {answer.user.user.name})
+            </div>
           </li>
         ))}
       </ul>
@@ -60,5 +65,6 @@ return (
     </div>
   );
 }
+
 
 export default Question;
