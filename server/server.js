@@ -1,34 +1,33 @@
-require('./db/connect')
-const express = require('express')
-const app = express()
+require('./db/connect');
+const express = require('express');
+const app = express();
 const questionRoutes = require('./routes/questionRoutes');
 const answerRoutes = require('./routes/answerRoutes');
 const path = require('path');
-const passport = require('passport')
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const flash = require('express-flash')
-const bodyParser = require("body-parser")
-const expressSession = require('express-session')
-const methodOverride = require('method-override')
-const authRoutes = require('./routes/authRoutes')
+const flash = require('express-flash');
+const bodyParser = require('body-parser');
+const expressSession = require('express-session');
+const methodOverride = require('method-override');
+const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
-const bcrypt = require('bcrypt')
-const User = require('./models/models').User
-const Question = require('./models/models').Question
-const Answer = require('./models/models').Answer
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const User = require('./models/models').User;
+const Question = require('./models/models').Question;
+const Answer = require('./models/models').Answer;
+const mongoose = require('mongoose'); // Add this line for mongoose
+const jwt = require('jsonwebtoken');
 
+const port = process.env.PORT || 4000;
 
-
-const port = (process.env.PORT || 4000)
-
-const start = async () =>{
-    try{
-        await app.listen(port, console.log(`server is listening on port ${port}...`))
-    } catch (error) {
-        console.log(error)
-    }
-}
+const start = async () => {
+  try {
+    await app.listen(port, console.log(`server is listening on port ${port}...`));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const allowedOrigins = ['http://localhost:3000'];
 
@@ -42,23 +41,27 @@ const corsOptions = {
   },
 };
 
-app.use(express.static(path.join(__dirname, 'client/express-app/build')));
+const buildPath = path.join(__dirname, '../client/express-app/build');
 
+app.use(express.static(buildPath));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/express-app/build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
+
 
 app.use(cors(corsOptions));
 
-app.use(express.urlencoded({ extended: false }))
-app.use(flash())
-app.use(expressSession({
-  secret: "hi",
-  resave: false, 
-  saveUninitialized: false
-}))
-app.use(methodOverride('_method'))
+app.use(express.urlencoded({ extended: false }));
+app.use(flash());
+app.use(
+  expressSession({
+    secret: 'hi',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(methodOverride('_method'));
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
@@ -69,46 +72,41 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
-  User.findOne({_id: id}, (err, user) => {
+  User.findOne({ _id: id }, (err, user) => {
     cb(err, user);
   });
 });
 
-passport.use(new LocalStrategy(
-  { usernameField: 'email' },
-  async (email, password, done) => {
-    try {
-      const user = await User.findOne({ email });
+passport.use(
+  new LocalStrategy(
+    { usernameField: 'email' },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
 
-      if (!user) {
-        return done(null, false, { message: 'No user with that email' });
+        if (!user) {
+          return done(null, false, { message: 'No user with that email' });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+          return done(null, user);
+        } else {
+          return done(null, false, { message: 'Password incorrect' });
+        }
+      } catch (error) {
+        return done(error);
       }
-
-      const match = await bcrypt.compare(password, user.password);
-
-      if (match) {
-        return done(null, user);
-      } else {
-        return done(null, false, { message: 'Password incorrect' });
-      }
-    } catch (error) {
-      return done(error);
     }
-  }
-));
-
-
-
-
-
+  )
+);
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next()
+    return next();
   }
-
 }
-
 
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
@@ -122,31 +120,28 @@ app.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      return res.status(200).json({user: user});
-      console.log(req.user)
+      return res.status(200).json({ user: user });
+      console.log(req.user);
     });
   })(req, res, next);
 });
 
+app.post('/register', async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+    await newUser.save();
+    console.log('user registered');
+    res.status(200).json({ message: 'Registration Successful' });
+  } catch (error) {
+    res.status(400).json({ message: 'Registration failed', error: error.message });
+  }
+});
 
-
-app.post('/register', async (req, res,) =>{
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        const newUser = new User({
-            name: req.body.name,
-            email:req.body.email,
-            password:hashedPassword,
-        })
-        await newUser.save();
-        console.log('user registered')
-        res.status(200).json({ message: 'Registration Successful' })
-    } catch {
-      res.status(400).json({ message: 'Registration failed', error: error.message });
-    }
-  })
-
-  
 app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
@@ -156,10 +151,10 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/profile', checkAuthenticated,(req, res) => {
+app.get('/profile', checkAuthenticated, (req, res) => {
   if (req.isAuthenticated()) {
-      res.send({
-        user
+    res.send({
+      user,
     });
   } else {
     // If not authenticated, send an error response
@@ -167,10 +162,6 @@ app.get('/profile', checkAuthenticated,(req, res) => {
   }
 });
 
-
-
-
-// Get questions by category
 app.get('/questions/:category', async (req, res) => {
   try {
     const category = req.params.category;
@@ -181,7 +172,6 @@ app.get('/questions/:category', async (req, res) => {
   }
 });
 
-// Create a new question
 app.post('/questions/:category', async (req, res) => {
   try {
     const { title, content, category, user } = req.body;
@@ -193,20 +183,15 @@ app.post('/questions/:category', async (req, res) => {
   }
 });
 
-// Get question details by ID with answers
 app.get('/questions/:category/:questionId', async (req, res) => {
   try {
-    const question = await Question
-      .findById(req.params.questionId)
-      .populate('answers'); // Populate answers
+    const question = await Question.findById(req.params.questionId).populate('answers');
     res.json(question);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-
-// Create a new answer
 app.post('/questions/:category/:questionId', async (req, res) => {
   try {
     const { content, questionId, category, user } = req.body;
@@ -214,14 +199,11 @@ app.post('/questions/:category/:questionId', async (req, res) => {
     const newAnswer = new Answer({ content, category, questionId, user });
     const savedAnswer = await newAnswer.save();
 
-    // Update the corresponding question's answers array
-    const updatedQuestion = await Question
-      .findByIdAndUpdate(
-        questionId,
-        { $push: { answers: savedAnswer._id } },
-        { new: true }
-      )
-      .populate('answers'); // Populate answers
+    const updatedQuestion = await Question.findByIdAndUpdate(
+      questionId,
+      { $push: { answers: savedAnswer._id } },
+      { new: true }
+    ).populate('answers');
 
     res.json(updatedQuestion);
   } catch (error) {
@@ -229,9 +211,6 @@ app.post('/questions/:category/:questionId', async (req, res) => {
   }
 });
 
-
-
-// Get answers for a specific question by question ID
 app.get('/questions/:questionId/answers', async (req, res) => {
   try {
     const questionId = req.params.questionId;
@@ -244,7 +223,4 @@ app.get('/questions/:questionId/answers', async (req, res) => {
   }
 });
 
-
-
-start()
-
+start();
