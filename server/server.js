@@ -215,7 +215,7 @@ app.get('/questions/:questionId/answers', async (req, res) => {
 });
 
 
-const buildPath = path.join(__dirname, '../client/express-app/build');
+const buildPath = path.join(__dirname, 'server', 'client', 'express-app', 'build');
 
 app.use(express.static(buildPath));
 
