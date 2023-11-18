@@ -39,7 +39,7 @@ return (
     <div className="form-container">
       <h3 className="form-heading">{question.title}</h3>
 
-      <div className="question-box">
+      <div>
         <h5 className="form-subheading">posted by {question.user.user.name}</h5>
         <p className="form-text">{question.content}</p>
       </div>
