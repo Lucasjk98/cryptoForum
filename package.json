@@ -4,9 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js",
-    "devStart": "nodemon server/server.js"
-    },
+  "start": "node server/server.js",
+  "devStart": "nodemon server/server.js",
+  "heroku-postbuild": "npm run build",
+  "build": "npm run build -C client/express-app"
+},
+
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -43,6 +43,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+const buildPath = path.join(__dirname, '../client/express-app/build');
+
+app.use(express.static(buildPath));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use(
@@ -215,9 +219,7 @@ app.get('/questions/:questionId/answers', async (req, res) => {
 });
 
 
-const buildPath = path.join(__dirname, '../client/express-app/build');
 
-app.use(express.static(buildPath));
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(buildPath, 'index.html'));
