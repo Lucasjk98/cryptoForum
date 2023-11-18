@@ -3,19 +3,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext, useUser } from './UserContext';
 
-function CategorySelection({ user }) {
-  // If user is not logged in, render a Link to the login page
-  if (!user) {
-    return (
-      <div className="form-container">
-        <h1 className="form-heading">Choose a Category</h1>
-        <div className="category-button">
-          <Link to="/login" className="category-link">Login to access categories</Link>
-        </div>
-      </div>
-    );
-  }
-
+function CategorySelection() {
   return (
     <div className="form-container">
       <h1 className="form-heading">Choose a Category</h1>
