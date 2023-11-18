@@ -36,6 +36,10 @@ code {
   background-color: #111;
 }
 
+.content {
+  padding-top: 60px; 
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
