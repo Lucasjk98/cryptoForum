@@ -20,7 +20,7 @@ function Register() {
 
 const handleRegistration = () => {
     console.log('registering')
-    axios.post('http://localhost:4000/register', user)
+    axios.post('https://evening-wave-27395-295955682332.herokuapp.com/register', user)
       .then((response) => {
         console.log(response.data);
         navigate('/login');
