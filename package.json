@@ -28,7 +28,9 @@
     "mongoose": "^7.6.1",
     "nodemon": "^3.0.1",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "react-scripts": "5.0.1"
+
   },
   "devDependencies": {
     "dotenv": "^16.3.1"
