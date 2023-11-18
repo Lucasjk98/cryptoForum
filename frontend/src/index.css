@@ -20,11 +20,11 @@ code {
   background-color: #333;
 }
 
-li {
+.header-item li {
   float: left;
 }
 
-li a {
+.header-item a {
   display: block;
   color: white;
   text-align: center;
@@ -32,17 +32,16 @@ li a {
   text-decoration: none;
 }
 
-li a:hover {
+.header-item a:hover {
   background-color: #111;
 }
-
 
 .form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 40vh; /* Adjust as needed */
+  height: 40vh; 
 }
 
 .form-heading {
@@ -53,7 +52,7 @@ li a:hover {
 .form-input {
   padding: 10px;
   margin-bottom: 15px;
-  width: 300px; /* Adjust as needed */
+  width: 300px; 
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -71,21 +70,21 @@ li a:hover {
   background-color: #0056b3;
 }
 
-.category-list {
+.link-list {
   list-style: none;
   padding: 0;
 }
 
-.category-list li {
+.link-list li {
   margin-bottom: 10px;
 }
 
-.form-link {
+.link {
   color: #007bff;
   text-decoration: none;
 }
 
-.form-link:hover {
+.link:hover {
   color: #0056b3;
 }
 
@@ -97,7 +96,7 @@ li a:hover {
   display: inline-block;
   padding: 10px;
   text-decoration: none;
-  font-size: 1.2em; /* Adjust as needed */
+  font-size: 1.2em; 
   font-weight: bold;
   color: #007bff;
   background-color: #fff;
