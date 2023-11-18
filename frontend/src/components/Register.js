@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
+import {API_BASE_URL} from '../api'
 
 
 
@@ -20,7 +21,7 @@ function Register() {
 
 const handleRegistration = () => {
     console.log('registering')
-    axios.post('https://evening-wave-27395-295955682332.herokuapp.com/register', user)
+    axios.post( API_BASE_URL + '/register', user)
       .then((response) => {
         console.log(response.data);
         navigate('/login');

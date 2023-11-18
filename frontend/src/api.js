@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://evening-wave-27395-295955682332.herokuapp.com';
+export const API_BASE_URL = 'https://evening-wave-27395-295955682332.herokuapp.com/api';
+// export const API_BASE_URL = 'http://localhost:4000/api';
 
 export const getQuestionsByCategory = (category) => {
   return axios.get(`${API_BASE_URL}/questions/${category}`);

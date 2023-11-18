@@ -1,8 +1,6 @@
 require('./db/connect');
 const express = require('express');
 const app = express();
-const questionRoutes = require('./routes/questionRoutes');
-const answerRoutes = require('./routes/answerRoutes');
 const path = require('path');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -10,7 +8,6 @@ const flash = require('express-flash');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const methodOverride = require('method-override');
-const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const User = require('./models/models').User;
@@ -29,7 +26,7 @@ const start = async () => {
   }
 };
 
-const allowedOrigins = ['http://localhost:3000', 'https://evening-wave-27395-295955682332.herokuapp.com'];
+const allowedOrigins = ['http://localhost:4000', 'https://evening-wave-27395-295955682332.herokuapp.com'];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -43,7 +40,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const buildPath = path.join(__dirname, '../client/express-app/build');
+const buildPath = path.join(__dirname, '../frontend/build');
 
 app.use(express.static(buildPath));
 
@@ -66,10 +63,13 @@ passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
 
-passport.deserializeUser((id, cb) => {
-  User.findOne({ _id: id }, (err, user) => {
-    cb(err, user);
-  });
+passport.deserializeUser(async (id, cb) => {
+  try{
+    const user = await User.findOne({ _id: id })
+    cb(null, user)
+  } catch(error) {
+    cb(error, null)
+  }
 });
 
 passport.use(
@@ -103,7 +103,7 @@ function checkAuthenticated(req, res, next) {
   }
 }
 
-app.post('/login', (req, res, next) => {
+app.post('/api/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
@@ -121,7 +121,7 @@ app.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = new User({
@@ -137,7 +137,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.get('/logout', (req, res) => {
+app.get('/api/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
       console.error(err);
@@ -146,7 +146,7 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/profile', checkAuthenticated, (req, res) => {
+app.get('/api/profile', checkAuthenticated, (req, res) => {
   if (req.isAuthenticated()) {
     res.send({
       user,
@@ -157,7 +157,7 @@ app.get('/profile', checkAuthenticated, (req, res) => {
   }
 });
 
-app.get('/questions/:category', async (req, res) => {
+app.get('/api/questions/:category', async (req, res) => {
   try {
     const category = req.params.category;
     const questions = await Question.find({ category });
@@ -167,7 +167,7 @@ app.get('/questions/:category', async (req, res) => {
   }
 });
 
-app.post('/questions/:category', async (req, res) => {
+app.post('/api/questions/:category', async (req, res) => {
   try {
     const { title, content, category, user } = req.body;
     const newQuestion = new Question({ title, content, category, user });
@@ -178,7 +178,7 @@ app.post('/questions/:category', async (req, res) => {
   }
 });
 
-app.get('/questions/:category/:questionId', async (req, res) => {
+app.get('/api/questions/:category/:questionId', async (req, res) => {
   try {
     const question = await Question.findById(req.params.questionId).populate('answers');
     res.json(question);
@@ -187,7 +187,7 @@ app.get('/questions/:category/:questionId', async (req, res) => {
   }
 });
 
-app.post('/questions/:category/:questionId', async (req, res) => {
+app.post('/api/questions/:category/:questionId', async (req, res) => {
   try {
     const { content, questionId, category, user } = req.body;
 
@@ -206,7 +206,7 @@ app.post('/questions/:category/:questionId', async (req, res) => {
   }
 });
 
-app.get('/questions/:questionId/answers', async (req, res) => {
+app.get('/api/questions/:questionId/answers', async (req, res) => {
   try {
     const questionId = req.params.questionId;
     const answers = await Answer.find({ questionId: mongoose.Types.ObjectId(questionId) });

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext, useUser } from './UserContext';
+import {API_BASE_URL} from '../api'
+
 
 
 function Login() {
@@ -25,7 +27,7 @@ const handleLogin = async () => {
     try {
       console.log('attempting login');
 
-      const response = await axios.post('https://evening-wave-27395-295955682332.herokuapp.com/login', user);
+      const response = await axios.post(API_BASE_URL + '/login', user);
       console.log(response.data);
 
       // Assuming the response.data contains user information
