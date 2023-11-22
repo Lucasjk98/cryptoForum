@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useUser } from './UserContext';
-import {API_BASE_URL} from '../api'
+import { API_BASE_URL } from '../api';
 
-
-
-const Profile = () => {
-    const { user } = useUser();
-    console.log(user)
-    const actionVariable = API_BASE_URL + '/logout'
-
-
-
-  
+function Profile() {
+  const { user } = useUser();
+  const actionVariable = `${API_BASE_URL}/logout`;
 
   return (
     <div>
       <h1>Profile</h1>
       {user ? (
         <div>
-          <p>Hello, {user.user.name}!</p>
-          <form action= {actionVariable} method="DELETE">
+          <p>
+            Hello,
+            {user.user.name}
+            !
+          </p>
+          <form action={actionVariable} method="DELETE">
             <button type="submit">Log Out</button>
           </form>
         </div>
@@ -29,6 +25,6 @@ const Profile = () => {
       )}
     </div>
   );
-};
+}
 
 export default Profile;

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import  {UserContext, useUser } from './UserContext';
+import { useUser } from './UserContext';
 
 function CategorySelection() {
   const { user } = useUser();
- 
+
   if (!user) {
     return (
       <div className="form-container">
