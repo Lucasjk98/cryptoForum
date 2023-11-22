@@ -1,19 +1,18 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const User = require('../models/models').User;
-
+const { User } = require('../models/models');
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
 
 passport.deserializeUser(async (id, cb) => {
-  try{
-    const user = await User.findOne({ _id: id })
-    cb(null, user)
-  } catch(error) {
-    cb(error, null)
+  try {
+    const user = await User.findOne({ _id: id });
+    cb(null, user);
+  } catch (error) {
+    cb(error, null);
   }
 });
 
@@ -32,14 +31,13 @@ passport.use(
 
         if (match) {
           return done(null, user);
-        } else {
-          return done(null, false, { message: 'Password incorrect' });
         }
+        return done(null, false, { message: 'Password incorrect' });
       } catch (error) {
         return done(error);
       }
-    }
-  )
+    },
+  ),
 );
 
 module.exports = passport;

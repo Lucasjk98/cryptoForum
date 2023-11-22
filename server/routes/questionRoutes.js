@@ -1,14 +1,14 @@
 const express = require('express');
+
 const router = express.Router();
 
-const Question = require('../models/models').Question;
-const Answer = require('../models/models').Answer;
 const mongoose = require('mongoose');
-
+const { Question } = require('../models/models');
+const { Answer } = require('../models/models');
 
 router.get('/questions/:category', async (req, res) => {
   try {
-    const category = req.params.category;
+    const { category } = req.params;
     const questions = await Question.find({ category });
     res.json(questions);
   } catch (error) {
@@ -18,8 +18,12 @@ router.get('/questions/:category', async (req, res) => {
 
 router.post('/questions/:category', async (req, res) => {
   try {
-    const { title, content, category, user } = req.body;
-    const newQuestion = new Question({ title, content, category, user });
+    const {
+      title, content, category, user,
+    } = req.body;
+    const newQuestion = new Question({
+      title, content, category, user,
+    });
     const savedQuestion = await newQuestion.save();
     res.json(savedQuestion);
   } catch (error) {
@@ -38,15 +42,19 @@ router.get('/questions/:category/:questionId', async (req, res) => {
 
 router.post('/questions/:category/:questionId', async (req, res) => {
   try {
-    const { content, questionId, category, user } = req.body;
+    const {
+      content, questionId, category, user,
+    } = req.body;
 
-    const newAnswer = new Answer({ content, category, questionId, user });
+    const newAnswer = new Answer({
+      content, category, questionId, user,
+    });
     const savedAnswer = await newAnswer.save();
 
     const updatedQuestion = await Question.findByIdAndUpdate(
       questionId,
-      { $push: { answers: savedAnswer._id } },
-      { new: true }
+      { $push: { answers: savedAnswer.id } },
+      { new: true },
     ).populate('answers');
 
     res.json(updatedQuestion);
@@ -57,7 +65,7 @@ router.post('/questions/:category/:questionId', async (req, res) => {
 
 router.get('/questions/:questionId/answers', async (req, res) => {
   try {
-    const questionId = req.params.questionId;
+    const { questionId } = req.params;
     const answers = await Answer.find({ questionId: mongoose.Types.ObjectId(questionId) });
     console.log('Answers:', answers);
     res.json(answers);
@@ -66,6 +74,5 @@ router.get('/questions/:questionId/answers', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;

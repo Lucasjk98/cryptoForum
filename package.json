@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "devStart": "nodemon server/server.js",
-    "heroku-postbuild": "cd frontend && npm install && npm run build" 
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "engines": {
     "node": "16.x",
@@ -19,6 +19,7 @@
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-flash": "^0.0.2",
@@ -30,9 +31,10 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "react-scripts": "5.0.1"
-
   },
   "devDependencies": {
-    "dotenv": "^16.3.1"
+    "eslint": "^8.54.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0"
   }
 }
