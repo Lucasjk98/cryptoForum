@@ -19,16 +19,15 @@ function Register() {
     setUser({ ...user, [name]: value });
   };
 
-const handleRegistration = () => {
-    console.log('registering')
-    axios.post( API_BASE_URL + '/register', user)
-      .then((response) => {
-        console.log(response.data);
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+  const handleRegistration = async() => {
+    try{
+      const response = await axios.post( API_BASE_URL + '/register', user)
+      console.log(response.data);
+      navigate('/login')
+    } catch (error){
+      console.log(error);
+    }
   };
 
 

@@ -8,15 +8,17 @@ function QuestionsList() {
 
 
   useEffect(() => {
-    // Use the API function to fetch questions by category
-    api.getQuestionsByCategory(category)
-      .then((response) => {
-        setQuestions(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching questions:', error);
-      });
-  }, [category]);
+  const fetchData = async () => {
+    try {
+      const response = await api.getQuestionsByCategory(category);
+      setQuestions(response.data);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  };
+
+  fetchData(); 
+}, [category]);
 
 
 return (

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from './UserContext';
+import {API_BASE_URL} from '../api'
+
 
 
 const Profile = () => {
     const { user } = useUser();
     console.log(user)
+    const actionVariable = API_BASE_URL + '/logout'
 
 
 
@@ -17,7 +20,7 @@ const Profile = () => {
       {user ? (
         <div>
           <p>Hello, {user.user.name}!</p>
-          <form action="/logout?_method=DELETE" method="DELETE">
+          <form action= {actionVariable} method="DELETE">
             <button type="submit">Log Out</button>
           </form>
         </div>

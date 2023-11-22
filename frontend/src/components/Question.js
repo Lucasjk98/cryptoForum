@@ -22,26 +22,24 @@ function Question() {
     fetchQuestionAndAnswers();
   }, [category, questionId]);
 
-  const handleCreateAnswer = () => {
-    api.createAnswer(category, questionId, newAnswer)
-      .then((response) => {
-        // Assuming the API response includes the updated question data
-        setQuestion(response.data);
-        // Reset the form fields
-        setNewAnswer({ content: '', category, questionId, user });
-      })
-      .catch((error) => {
-        console.error('Answer creation failed:', error);
-      });
+  const handleCreateAnswer = async() => {
+    try{
+      const response = await api.createAnswer(category, questionId, newAnswer)
+      setQuestion(response.data);
+      setNewAnswer({content: '', category, questionId, user});
+    } catch (error) {
+      console.error('Answer creation failed:', error);
+    }
   };
+
 
 return (
     <div className="form-container">
       <h3 className="form-heading">{question.title}</h3>
 
       <div>
-        <h5 className="form-subheading">posted by {question.user.user.name}</h5>
         <p className="form-text">{question.content}</p>
+        <h5 className="form-subheading">posted by {question.user.user.name}</h5>
       </div>
 
       <ul className="no-bullets">
