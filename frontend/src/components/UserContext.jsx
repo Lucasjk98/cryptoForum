@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState } from 'react';
 
 export const UserContext = createContext();
 
-export const UserProvider = ({ children }) => {
+// eslint-disable-next-line react/prop-types
+export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   const updateUser = (newUser) => {
@@ -10,11 +11,12 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <UserContext.Provider value={{ user, updateUser }}>
       {children}
     </UserContext.Provider>
   );
-};
+}
 
 export const useUser = () => {
   const context = useContext(UserContext);

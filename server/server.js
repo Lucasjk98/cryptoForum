@@ -1,28 +1,21 @@
-require('dotenv').config()
+require('dotenv').config({ path: `${__dirname}/.env` });
 
-require('./db/connect');
 const express = require('express');
+
 const app = express();
 const path = require('path');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
 const flash = require('express-flash');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const methodOverride = require('method-override');
+const connectToDB = require('./db/connect');
 const corsMiddleware = require('./middleware/cors');
 const authRoutes = require('./routes/authRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 
 const port = process.env.PORT || 4000;
-
-const start = async () => {
-  try {
-    await app.listen(port, console.log(`server is listening on port ${port}...`));
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 app.use(corsMiddleware);
 
@@ -37,11 +30,10 @@ app.use(
     secret: 'hi',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 app.use(methodOverride('_method'));
 app.use(express.json());
-app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', authRoutes);
@@ -51,6 +43,13 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(buildPath, 'index.html'));
 });
 
+const start = async () => {
+  try {
+    await connectToDB();
+    app.listen(port, console.log(`server is listening on port ${port}...`));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 start();
-
-
